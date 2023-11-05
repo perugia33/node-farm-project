@@ -30,44 +30,33 @@ const dataObj = JSON.parse(data);
   
 
  const server = http.createServer((req, res) =>{
-    console.log("This is parse.url", url.parse(req.url, true));
-    console.log('This is req.url',  req.url);
     const pathName = req.url;
 
-
-
     // CSS Stylesheet
-
     if(pathName ===  '/style.css'){
         res.writeHead(200,  { 'Content-type': 'text/css' });
         res.end(styleCSS);
 
     // Overview Page
-
      }else if(pathName ===  '/'  || pathName === '/overview'){
         res.writeHead(200,  { 'Content-type': 'text/html' });
 
         const cardsHtml = dataObj.map(el => replaceTemplateItem(tempCard, el)).join( ' ');
-        // creates an array with json data which is convert into one string
-      
-         const output = tempOverview.replace('{%PRODUCT_CARDS%}', cardsHtml);      
-       
+        // creates an array with json data which is convert into one string   
+         const output = tempOverview.replace('{%PRODUCT_CARDS%}', cardsHtml);             
          res.end(output);
 
     // Product Page
-
     } else if (pathName === '/product'){
         res.end("This is the Product");
 
      // API
-
     } else if(pathName === '/api'){
             res.writeHead(200,  {
                 'Content-type': 'application/json' });
                 res.end(data);
 
      //  Not Found
-
     } else{
         res.writeHead(404, { 
             'Content-type': 'text/html'
@@ -75,10 +64,10 @@ const dataObj = JSON.parse(data);
         res.end( '<h1>  Page not found   </h1>');
     }
 
- })
+ });
 server.listen(8000, '127.0.0.1' ,   ()=> {
     console.log('Server is listening on port 8000')
-})
+});
 
 
 
