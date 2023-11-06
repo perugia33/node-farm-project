@@ -30,15 +30,15 @@ const dataObj = JSON.parse(data);
   
 
  const server = http.createServer((req, res) =>{
-    const pathName = req.url;
+    const {query, pathname} = (url.parse(req.url, true));
 
     // CSS Stylesheet
-    if(pathName ===  '/style.css'){
+    if(pathname ===  '/style.css'){
         res.writeHead(200,  { 'Content-type': 'text/css' });
         res.end(styleCSS);
 
     // Overview Page
-     }else if(pathName ===  '/'  || pathName === '/overview'){
+     }else if(pathname ===  '/'  || pathname === '/overview'){
         res.writeHead(200,  { 'Content-type': 'text/html' });
 
         const cardsHtml = dataObj.map(el => replaceTemplateItem(tempCard, el)).join( ' ');
@@ -47,11 +47,14 @@ const dataObj = JSON.parse(data);
          res.end(output);
 
     // Product Page
-    } else if (pathName === '/product'){
-        res.end("This is the Product");
+    } else if (pathname === '/product'){
+        res.writeHead(200,  { 'Content-type': 'text/html' });
+        const product = dataObj[query.id];
+        const output = replaceTemplateItem(tempProduct, product);
+        res.end(output);
 
      // API
-    } else if(pathName === '/api'){
+    } else if(pathname === '/api'){
             res.writeHead(200,  {
                 'Content-type': 'application/json' });
                 res.end(data);
